@@ -305,67 +305,6 @@ def junctionCheckEz(lcol, rcol): #iteration 2
     else:
         linetrack(lcol, rcol, knorm)
 
-leftlist = []
-rightlist = []
-def colourdists(lcol, rcol):
-    global leftlist, rightlist
-    while True:
-        lcol = leftcolour.read("RGB")
-        rcol = rightcolour.read("RGB")
-        lcol0 = float(((lcol[0] - lmin[0])/100)/(lrange[0]/100))
-        rcol0 = float(((rcol[0] - rmin[0])/100)/(rrange[0]/100))
-        lcol1 = float(((lcol[1] - lmin[1])/100)/(lrange[1]/100))
-        rcol1 = float(((rcol[1] - rmin[1])/100)/(rrange[1]/100))
-        lcol2 = float(((lcol[2] - lmin[2])/100)/(lrange[2]/100))
-        rcol2 = float(((rcol[2] - rmin[2])/100)/(rrange[2]/100))
-        leftdist = math.sqrt(pow(lcol0, 2) + pow(lcol1, 2) + pow(lcol2, 2))
-        rightdist = math.sqrt(pow(rcol0, 2) + pow(rcol1, 2) + pow(rcol2, 2))
-        print(leftdist, rightdist)
-        leftlist == leftlist.append(leftdist)
-        rightlist == rightlist.append(rightdist)
-        if len(leftlist) > 10:
-            leftlist = leftlist[-10:]
-        if len(rightlist) > 10:
-            rightlist = rightlist[-10:]
-        # print(leftlist, rightlist)
-        return (leftlist, rightlist)
-
-
-def junctionCheckFinal(lcole, rcole):
-    global leftcolour
-    global rightcolour
-    # lcol = leftcolour.read("RGB")
-    # rcol = rightcolour.read("RGB")
-    if lcole < 0.5 and rcole < 0.5:
-        bot.straight(-25)
-        wait(1000)
-        rlist = colourdists(lcol, rcol)[1]
-        llist = colourdists(lcol, rcol)[0]
-        ravg = sum(rlist) / len(rlist)
-        lavg = sum(llist) / len(llist)
-        print(ravg, lavg)
-        if ravg < 1 and lavg > 1:
-            print("rg")
-            bot.straight(80)
-            wait(100)
-            bot.turn(70) #maybe it doesnt need perfect 90?
-            while calibrate(lcol, rcol)[0] > 0.6:
-                bot.drive(100, 30)
-                break
-        elif lavg < 1 and ravg > 1:
-            print("lg")
-            bot.straight(80)
-            wait(100)
-            bot.turn(-70) #maybe it doesnt need perfect 90?
-            while calibrate(lcol, rcol)[1] > 0.6:
-                bot.drive(100, -30)
-                break
-        elif ravg < 1.15 and lavg < 1.15:
-            print("dg")
-            bot.turn(180)
-        else:   
-            linetrackForDist(lcol, rcol, knorm, 75)
-
 
     #     lcol1 = lcollist[-10:]
     #     rcol1 = rcollist[-10:]
@@ -420,29 +359,6 @@ def junctionCheckFinal(lcole, rcole):
     #     else:
     #         linetrack(lcol, rcol, knorm)
 
-
-def leftobstacleDodge(): #run after camera detects obstacle
-    print("t")
-    bot.reset()
-    bot.straight(-20)
-    # bot.stop()
-    print("Obstacle Detected")
-    print("y")
-    bot.turn(70)
-    bot.straight(50)
-    # bot.reset()
-    bot.stop()
-    while True:
-        dist = lsidesound.distance()
-        if 70 < dist < 100:
-            rightmotor.stop()
-            leftmotor.stop()
-            ev3.speaker.beep()
-            rightmotor.run_angle(100, 250)
-            leftmotor.run_angle(100, 50)
-        elif dist < 70:
-            rightmotor.run(100)
-            leftmotor.run(200)
         # if calibrate(lcol, rcol)[1] < 0.6:
         #     linetrack(lcole, rcole, knorm)
         # break
